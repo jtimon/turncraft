@@ -1,4 +1,5 @@
 
+use turncraft::player::PlayerMan;
 use turncraft::ui;
 
 fn print_separator() {
@@ -22,8 +23,16 @@ fn print_turn(turn: usize) {
 
 fn main() {
     print_title();
-    println!("Number of players (2 to 8)");
+    println!("Number of players (2 to 8): ");
     let num_players : usize = ui::input_u32(2, 8) as usize;
+    print_separator();
+
+    let mut playerman : PlayerMan = PlayerMan::new();
+    for n in 0..num_players {
+        println!("-------Player {}", n);
+        playerman.new_player();
+    }
+    print_separator();
 
     let mut turn : usize = 0;
     let mut exit_turncraft = false;
@@ -34,6 +43,7 @@ fn main() {
         match sel_option {
             1 => {
                 print_turn(turn);
+                playerman.print();
                 turn += 1;
             }
             0 => exit_turncraft = true,
