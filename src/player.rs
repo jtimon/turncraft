@@ -5,11 +5,12 @@ use crate::ui;
 struct Player {
     player_name: String,
     money: u64,
+    population: u64,
 }
 
 impl Player {
     pub fn new(player_name: String) -> Player {
-        Player{player_name, money: 0}
+        Player{player_name, money: 0, population: 3000}
     }
 }
 
@@ -42,7 +43,7 @@ impl PlayerMan {
 
     pub fn print(&self) {
         for p in &self.players {
-            println!("player_name: {}, money: {:?}", p.player_name, p.money);
+            println!("player_name: {}, money: {}, population: {}", p.player_name, p.money, p.population);
         }
     }
 }
