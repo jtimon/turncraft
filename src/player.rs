@@ -6,12 +6,13 @@ struct Player {
     player_name: String,
     money: u64,
     population: u64,
+    soldiers: u64,
     option: u32,
 }
 
 impl Player {
     pub fn new(player_name: String) -> Player {
-        Player{player_name, money: 0, population: 3, option: 1}
+        Player{player_name, money: 0, population: 3, soldiers: 0, option: 1}
     }
 }
 
@@ -44,7 +45,11 @@ impl PlayerMan {
 
     pub fn print(&self) {
         for p in &self.players {
-            println!("player_name: {}, money: {}, population: {}", p.player_name, p.money, p.population);
+            if p.option != 0 {
+                println!("player_name: {}", p.player_name);
+                println!("money: {}, population: {}, soldiers: {}",
+                         p.money, p.population, p.soldiers);
+            }
         }
     }
 
@@ -52,8 +57,13 @@ impl PlayerMan {
         for p in &mut self.players {
             if p.option != 0 {
                 println!("Player: {}", p.player_name);
-                println!("Options: 1) Trade 2) Housing 0) Surrender");
-                p.option = ui::input_u32(0, 2);
+                if p.money > 1 {
+                    println!("Options: 1) Trade 2) Housing 3) Soldiers 0) Surrender");
+                    p.option = ui::input_u32(0, 3);
+                } else {
+                    println!("Options: 1) Trade 2) Housing 0) Surrender");
+                    p.option = ui::input_u32(0, 2);
+                }
             }
         }
     }
@@ -64,6 +74,9 @@ impl PlayerMan {
                 p.money += p.population;
             } else if p.option == 2 {
                 p.population += 1;
+            } else if p.option == 3 {
+                p.money -= 1;
+                p.soldiers += 1;
             }
         }
     }
