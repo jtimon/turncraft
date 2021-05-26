@@ -6,11 +6,12 @@ struct Player {
     player_name: String,
     money: u64,
     population: u64,
+    option: u32,
 }
 
 impl Player {
     pub fn new(player_name: String) -> Player {
-        Player{player_name, money: 0, population: 3000}
+        Player{player_name, money: 0, population: 3, option: 1}
     }
 }
 
@@ -44,6 +45,44 @@ impl PlayerMan {
     pub fn print(&self) {
         for p in &self.players {
             println!("player_name: {}, money: {}, population: {}", p.player_name, p.money, p.population);
+        }
+    }
+
+    pub fn select_turn(&mut self) {
+        for p in &mut self.players {
+            if p.option != 0 {
+                println!("Player: {}", p.player_name);
+                println!("Options: 1) Trade 2) Housing 0) Surrender");
+                p.option = ui::input_u32(0, 2);
+            }
+        }
+    }
+
+    pub fn execute_turn(&mut self) {
+        for p in &mut self.players {
+            if p.option == 1 {
+                p.money += p.population;
+            } else if p.option == 2 {
+                p.population += 1;
+            }
+        }
+    }
+
+    pub fn living_players(&self) -> u8 {
+        let mut n_living_players = 0;
+        for p in &self.players {
+            if p.option != 0 {
+                n_living_players += 1;
+            }
+        }
+        n_living_players
+    }
+
+    pub fn print_winner(&self) {
+        for p in &self.players {
+            if p.option != 0 {
+                println!("The winner is {}", p.player_name);
+            }
         }
     }
 }
